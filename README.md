@@ -1,6 +1,6 @@
 # Docker Alpine cfssl
 
-For your [PKI] needs, this is another [Docker] container to ease [cfssl] usage.
+For your [PKI] needs, this is another [Docker] image to ease [cfssl] usage.
 
 The image is [Alpine](https://alpinelinux.org/) based in order to reduce its footprint.
 
@@ -92,8 +92,8 @@ You can test by asking for a new certificate:
 curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]}}' http://localhost:8888/api/v1/cfssl/newcert
 ```
 
-In order to stop this container, you will have to issue `docker stop <container name>` (`<ctrl-c>` will not work).
-Use `docker ps` to find the name of the running container.
+In order to stop this instance, you will have to issue `docker stop <instance name>` (`<ctrl-c>` will not work).
+Use `docker ps` to find the name of the running instance.
 
 
 [bash]: https://www.docker.com/
