@@ -7,7 +7,14 @@ The image is [Alpine](https://alpinelinux.org/) based in order to reduce its foo
 
 ## Basic usage
 
-First thing to do is to add the `cfssl` [bash] script location to your `PATH`.
+First thing to do is to get the [bin/cfssl] executable:
+
+```sh
+curl -LO https://github.com/gautaz/docker-alpine-cfssl/raw/master/bin/cfssl
+chmod u+x cfssl
+```
+
+Then add the `cfssl` [bash] script location to your `PATH`.
 
 You may use the [Docker] image directly if [bash] is not available on your platform by issuing:
 
@@ -39,8 +46,8 @@ Once all of your [PKI] environment has been built up, you might want to use the 
 
  A few steps are generally needed in order to obtain a fully working [PKI] with [cfssl]:
 
-- creating a certificate authority ([CA]);
-- optionally creating an intermediate authority;
+- creating a root certificate authority ([CA]);
+- optionally creating an intermediate [CA];
 - starting [cfssl] as a service;
 - querying the [cfssl] API to manage certificates.
 
@@ -73,16 +80,16 @@ This will create three additional files:
 - `ca-key.pem`: a [PEM formatted] file containing the private key of your [CA];
 - `ca.pem`: a [PEM formatted] file containing the (self-)signed certificate of your [CA].
 
-Now you can create the [cfssl] policy configuration file which is [JSON] formatted:
+Then run the [cfssl] service which will answer your [API](https://github.com/cloudflare/cfssl/tree/master/doc/api) calls:
 
 ```sh
-cfssl print-defaults config > ca-config.json
+cfssl serve -ca-key ca-key.pem -ca ca.pem -address=0.0.0.0 -- -p 8888:8888
 ```
 
-Modify it to fit your needs and then run the [cfssl] service which will answer your [API](https://github.com/cloudflare/cfssl/tree/master/doc/api) calls:
+You can test by asking for a new certificate:
 
 ```sh
-cfssl serve -ca-key ca-key.pem -ca ca.pem -config ca-config.json -- -p 8888:8888
+curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]}}' http://localhost:8888/api/v1/cfssl/newcert
 ```
 
 In order to stop this container, you will have to issue `docker stop <container name>` (`<ctrl-c>` will not work).
