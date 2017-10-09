@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+declare -a dockerargs
+declare -a cfsslargs
+cfssl=true
+
+if [ $# -eq 0 ]; then
+	cat <<- EOH
+	Usage: cfssl [--] [option...]
+
+	All options are passed by default to the Docker instance entry point.
+
+	In order to pass Docker run options:
+	cfssl -- [docker option...] -- [cfssl option...]
+
+	Each time '--' is used, it switches the option context.
+
+	EOH
+else
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			--)
+				if $cfssl; then
+					cfssl=false
+				else
+					cfssl=true
+				fi
+				;;
+			*)
+				if $cfssl; then
+					cfsslargs[${#cfsslargs[*]}]="$1"
+				else
+					dockerargs[${#dockerargs[*]}]="$1"
+				fi
+				;;
+		esac
+		shift
+	done
+fi
+
+docker run --rm -i -v "${PWD}:/home/cfssl" "${dockerargs[@]}" gautaz/alpine-cfssl "${cfsslargs[@]}"
