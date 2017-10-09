@@ -24,12 +24,12 @@ Simply issue `cfssl` on the command line to get the general help page.
 Basically `cfssl` will give you access to a set of commands provided by [cfssl].
 The general syntax is `cfssl <command> [option...]`.
 
-In order to get help for a particular command simply issue `cfssl <command> -h` where `<command>` is the command you want the help for.
+In order to get help for a particular command simply issue `cfssl <command> -h` where `<command>` is the command you want help for.
 
 ### Shell script goal
 
 The `cfssl` script is designed to enable piping which is necessary to operate part of the flow needed to operate a [PKI] with [cfssl].
-In particular some [cfssl] commands may issue [JSON] content that is to be used by other commands.
+In particular some [cfssl] commands may output [JSON] content that is to be used by other commands.
 
 However this script will not behave well when the goal is to operate a daemon.
 Once all of your [PKI] environment has been built up, you might want to use the image directly with [Docker Compose] without using the `cfssl` shell script.
@@ -61,7 +61,7 @@ Once you have edited the file, you can generate everything needed to operate you
 cfssl gencert -initca ca-csr.json | cfssl json -bare ca -
 ```
 
-If you did not want to modify default values, you could have simply issued:
+If you did not want to modify the default values, you could have simply issued:
 
 ```sh
 cfssl print-defaults csr | cfssl gencert -initca - | cfssl json -bare ca -
@@ -69,7 +69,7 @@ cfssl print-defaults csr | cfssl gencert -initca - | cfssl json -bare ca -
 
 This will create three additional files:
 
-- `ca.csr`: a [PEM formatted] file containing the certificate signing request for your [CA];
+- `ca.csr`: a [PEM formatted] file containing the [CSR] for your [CA];
 - `ca-key.pem`: a [PEM formatted] file containing the private key of your [CA];
 - `ca.pem`: a [PEM formatted] file containing the (self-)signed certificate of your [CA].
 
@@ -79,14 +79,14 @@ Now you can create the [cfssl] policy configuration file which is [JSON] formatt
 cfssl print-defaults config > ca-config.json
 ```
 
-At last, you can now run the [cfssl] service which will answer your API calls:
+Modify it to fit your needs and then run the [cfssl] service which will answer your [API](https://github.com/cloudflare/cfssl/tree/master/doc/api) calls:
 
 ```sh
-cfssl serve -ca-key ca-key.pem -ca ca.pem -config ca-config.json -- -p 8888
+cfssl serve -ca-key ca-key.pem -ca ca.pem -config ca-config.json -- -p 8888:8888
 ```
 
-Use `docker ps` to find the name of the running container and the port is is listening on.
-In order to stop this container, you will have to issue `docker stop <container name>`.
+In order to stop this container, you will have to issue `docker stop <container name>` (`<ctrl-c>` will not work).
+Use `docker ps` to find the name of the running container.
 
 
 [bash]: https://www.docker.com/
