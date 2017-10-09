@@ -7,7 +7,7 @@ The image is [Alpine](https://alpinelinux.org/) based in order to reduce its foo
 
 ## Basic usage
 
-First thing to do is to get the [cfssl executable](./bin/cfssl):
+First thing to do is to get the [cfssl executable](https://github.com/gautaz/docker-alpine-cfssl/blob/master/bin/cfssl):
 
 ```sh
 curl -LO https://github.com/gautaz/docker-alpine-cfssl/raw/master/bin/cfssl
