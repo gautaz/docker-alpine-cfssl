@@ -95,6 +95,28 @@ curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":204
 In order to stop this instance, you will have to issue `docker stop <instance name>` (`<ctrl-c>` will not work).
 Use `docker ps` to find the name of the running instance.
 
+### Using signing profiles
+
+Depending on what the certificate is intended for, different signing profile might be used.
+
+This can be detailed in the `cfssl serve` configuration file, a default configuration can easily be obtained:
+
+```sh
+cfssl print-defaults config > ca-config.json
+```
+
+Then you can start the API server by passing it this configuration file:
+
+```sh
+cfssl serve -config=ca-config.json -ca-key=ca-key.pem -ca=ca.pem -address=0.0.0.0 -- -p 8888:8888
+```
+
+Obtaining a new certificate now also means providing the signing profile to use in the request::
+
+```sh
+curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]},"profile":"client"}' http://localhost:8888/api/v1/cfssl/newcert
+```
+
 
 [bash]: https://www.docker.com/
 [CA]: https://en.wikipedia.org/wiki/Certificate_authority
