@@ -83,7 +83,7 @@ This will create three additional files:
 Then run the [cfssl] service which will answer your [API](https://github.com/cloudflare/cfssl/tree/master/doc/api) calls:
 
 ```sh
-cfssl serve -ca-key ca-key.pem -ca ca.pem -address=0.0.0.0 -- -p 8888:8888
+cfssl serve -ca-key=ca-key.pem -ca=ca.pem -address=0.0.0.0 -- -p 8888:8888
 ```
 
 You can test by asking for a new certificate:
