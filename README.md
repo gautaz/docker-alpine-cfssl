@@ -65,13 +65,13 @@ This will create a default [CSR] configuration that you might want to modify in 
 Once you have edited the file, you can generate everything needed to operate your own [CA]:
 
 ```sh
-cfssl gencert -initca ca-csr.json | cfssl json -bare ca -
+cfssl gencert -initca ca-csr.json | cfssl json -bare ca
 ```
 
 If you did not want to modify the default values, you could have simply issued:
 
 ```sh
-cfssl print-defaults csr | cfssl gencert -initca - | cfssl json -bare ca -
+cfssl print-defaults csr | cfssl gencert -initca - | cfssl json -bare ca
 ```
 
 This will create three additional files:
