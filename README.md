@@ -86,14 +86,48 @@ Then run the [cfssl] service which will answer your [API](https://github.com/clo
 cfssl serve -ca-key=ca-key.pem -ca=ca.pem -address=0.0.0.0 -- -p 8888:8888
 ```
 
-You can test by asking for a new certificate:
+> In order to stop this instance, you will have to issue `docker stop <instance name>` (`<ctrl-c>` will not work).
+> Use `docker ps` to find the name of the running instance.
+
+You can test the service by asking for a new certificate and saving data to [PEM formatted] files:
 
 ```sh
-curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]}}' http://localhost:8888/api/v1/cfssl/newcert
+curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]}}' http://localhost:8888/api/v1/cfssl/newcert | cfssl json server
 ```
 
-In order to stop this instance, you will have to issue `docker stop <instance name>` (`<ctrl-c>` will not work).
-Use `docker ps` to find the name of the running instance.
+You can then launch an [OpenSSL] server using this certificate:
+
+```sh
+openssl s_server -key server-key.pem -cert server.pem -accept 4433
+```
+
+And check that an [OpenSSL] client will connect to this server by trusting the CA:
+
+```sh
+openssl s_client -connect localhost:4433 -CAfile ca.pem
+```
+
+### Mutual authentication
+
+The following uses the same CA for both client and server certificates but different CAs can be used.
+
+Based on the previous section, you can also generate a client certificate:
+
+```sh
+curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]}}' http://localhost:8888/api/v1/cfssl/newcert | cfssl json client
+```
+
+You can then launch an [OpenSSL] server using this certificate and trusting client certificates emitted by the common CA:
+
+```sh
+openssl s_server -key server-key.pem -cert server.pem -accept 4433 -Verify 0 -CAfile ca.pem
+```
+
+Then check that an [OpenSSL] client will connect to this server by trusting the CA and using the previously created client certificate:
+
+```sh
+openssl s_client -connect localhost:4433 -CAfile ca.pem -key client-key.pem -cert client.pem
+```
 
 ### Using signing profiles
 
@@ -125,5 +159,6 @@ curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":204
 [Docker]: https://www.docker.com/
 [Docker Compose]: https://docs.docker.com/compose/
 [JSON]: http://json.org/
+[OpenSSL]: https://www.openssl.org/
 [PEM formatted]: https://en.wikipedia.org/wiki/X.509#Certificate_filename_extensions
 [PKI]: https://en.wikipedia.org/wiki/Public_key_infrastructure
