@@ -97,7 +97,7 @@ Use `docker ps` to find the name of the running instance.
 
 ### Using signing profiles
 
-Depending on what the certificate is intended for, different signing profile might be used.
+Depending on what the certificate is intended for, different signing profiles might be used.
 
 This can be detailed in the `cfssl serve` configuration file, a default configuration can easily be obtained:
 
