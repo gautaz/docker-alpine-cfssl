@@ -256,6 +256,8 @@ The `server-bundle.pem` contains in fact two certificates:
 - first the newly created certificate which is signed by the intermediate certificate;
 - then the intermediate certificate which is signed by the root certificate.
 
+> The order **matters** in order to comply with [the section 7.4.2 of RFC 5246](https://tools.ietf.org/html/rfc5246#section-7.4.2).
+
 The [OpenSSL] `s_server` command seems unable to use a certificate bundle (or at least I did not find a way to do so).
 Instead you can use this simple [Python] script (save it in `https.py`):
 
