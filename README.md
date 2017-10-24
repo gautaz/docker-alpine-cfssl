@@ -165,7 +165,7 @@ This bundle contains both the newly delivered certificate and the intermediate [
 When receiving such a bundle the client can authenticate it by using the following chain of trust (`->` means "trusts" or "certifies"):
 
 ```
-client -> root [CA] -> intermediate [CA] -> new certificate
+client -> root CA -> intermediate CA -> new certificate
 ```
 
 For this to work, you first need to create an intermediate [CA] signed by the root [CA].
