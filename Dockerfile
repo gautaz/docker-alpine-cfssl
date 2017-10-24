@@ -1,10 +1,34 @@
-FROM alpine:edge
+FROM alpine:3.6 as builder
+
+ENV PATH /go/bin:/usr/local/go/bin:$PATH
+ENV GOPATH /go
+ENV USER root
 
 RUN \
-echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
 apk update && \
-apk add cfssl && \
+apk upgrade && \
+apk add git go musl-dev && \
+mkdir -p /go/src/github.com/cloudflare && \
+cd /go/src/github.com/cloudflare && \
+git clone https://github.com/cloudflare/cfssl.git && \
+cd cfssl && \
+go build -o /go/bin/cfssl ./cmd/cfssl && \
+go build -o /go/bin/cfssljson ./cmd/cfssljson && \
+go build -o /go/bin/mkbundle ./cmd/mkbundle && \
+go build -o /go/bin/multirootca ./cmd/multirootca
+
+
+FROM alpine:3.6
+
+RUN \
+apk update && \
+apk upgrade && \
 adduser -D cfssl
+
+COPY --from=builder /go/bin/cfssl /usr/bin
+COPY --from=builder /go/bin/cfssljson /usr/bin
+COPY --from=builder /go/bin/mkbundle /usr/bin
+COPY --from=builder /go/bin/multirootca /usr/bin
 
 COPY entrypoint.sh /
 USER cfssl:cfssl
