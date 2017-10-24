@@ -45,7 +45,7 @@ However this script will not behave well when the goal is to operate a daemon.
 Once all of your [PKI] environment has been built up, you might want to use the image directly with [Docker Compose] without using the `cfssl` shell script.
 
 
-## Operating a [PKI]
+## Operating a Public Key Infrastructure
 
  A few steps are generally needed in order to obtain a fully working [PKI] with [cfssl]:
 
