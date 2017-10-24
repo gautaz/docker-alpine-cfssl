@@ -242,7 +242,7 @@ curl -X POST -d "$(curl -X POST -d '{"request":{"CN":"localhost","hosts":[""],"k
 > - the `newcert` API is used to generate a new certificate;
 > - the output is forked with `tee` and passed to `cfssl json` to write the certificate and its key respectively to `server.pem` and `server-key.pem`;
 > - the same output is passed to the [jq] command to generate a `bundle` API request (`{certificate: <new certificate>}`);
-> - the `bundle` API ingests this request and its [JSON] result is again processed by [jq] and written in the file `server-bundle.pem`.
+> - the `bundle` API ingests this request, its [JSON] result is again processed by [jq] and written in the file `server-bundle.pem`.
 
 Four files result from this command:
 
@@ -274,7 +274,7 @@ You can then launch the [Python] HTTPS server using the certificate bundle:
 python https.py
 ```
 
-And check that an [OpenSSL] client will connect successfully to this server by trusting the [CA]:
+And finally check that an [OpenSSL] client will connect successfully to this server by trusting the [CA]:
 
 ```sh
 openssl s_client -connect localhost:4433 -CAfile ca.pem
