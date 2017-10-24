@@ -101,7 +101,7 @@ You can then launch an [OpenSSL] server using this certificate:
 openssl s_server -key server-key.pem -cert server.pem -accept 4433
 ```
 
-And check that an [OpenSSL] client will connect to this server by trusting the CA:
+And check that an [OpenSSL] client will connect to this server by trusting the [CA]:
 
 ```sh
 openssl s_client -connect localhost:4433 -CAfile ca.pem
@@ -109,7 +109,7 @@ openssl s_client -connect localhost:4433 -CAfile ca.pem
 
 ### Mutual authentication
 
-The following uses the same CA for both client and server certificates but different CAs can be used.
+The following uses the same [CA] for both client and server certificates but different [CA]s can be used.
 
 Based on the previous section, you can also generate a client certificate:
 
@@ -117,13 +117,13 @@ Based on the previous section, you can also generate a client certificate:
 curl -X POST -d '{"request":{"CN":"","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"","ST":"","L":"","O":""}]}}' http://localhost:8888/api/v1/cfssl/newcert | cfssl json client
 ```
 
-You can then launch an [OpenSSL] server using this certificate and trusting client certificates emitted by the common CA:
+You can then launch an [OpenSSL] server using this certificate and trusting client certificates emitted by the common [CA]:
 
 ```sh
 openssl s_server -key server-key.pem -cert server.pem -accept 4433 -Verify 0 -CAfile ca.pem
 ```
 
-Then check that an [OpenSSL] client will connect to this server by trusting the CA and using the previously created client certificate:
+Then check that an [OpenSSL] client will connect to this server by trusting the [CA] and using the previously created client certificate:
 
 ```sh
 openssl s_client -connect localhost:4433 -CAfile ca.pem -key client-key.pem -cert client.pem
