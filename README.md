@@ -4,6 +4,9 @@ For your [PKI] needs, this is another [Docker] image to ease [cfssl] usage.
 
 The image is [Alpine](https://alpinelinux.org/) based in order to reduce its footprint.
 
+**WARNING: All the following reflects my understanding of [TLS] and the [cfssl] API which might not be accurate as I am NOT a security expert.
+Do not hesitate to add [issues](https://github.com/gautaz/docker-alpine-cfssl/issues) or propose [PRs](https://github.com/gautaz/docker-alpine-cfssl/pulls) to fix any inaccuracies.**
+
 
 ## Basic usage
 
@@ -225,7 +228,7 @@ This `cfssl` instance is able to:
 - deliver new certificates based on the intermediate [CA] due to the use of `-ca-key` and `-ca` options;
 - bundle certificates by knowing all root and intermediate certificates available (through bundle options).
 
-> Root certificates will not be included in the bundles produced by `cfssl` as they are supposed to be trusted by the other party during the TLS handshake.
+> Root certificates will not be included in the bundles produced by `cfssl` as they are supposed to be trusted by the other party during the [TLS] handshake.
 > Intermediate certificates will be added to the produced bundles in order to complete the certificate chain up to an intermediate certificate that is signed by a root certificate.
 
 You can then generate a server certificate and its bundle with the following command:
@@ -290,3 +293,4 @@ openssl s_client -connect localhost:4433 -CAfile ca.pem
 [Python]: https://www.python.org/
 [PEM formatted]: https://en.wikipedia.org/wiki/X.509#Certificate_filename_extensions
 [PKI]: https://en.wikipedia.org/wiki/Public_key_infrastructure
+[TLS]: https://en.wikipedia.org/wiki/Transport_Layer_Security
