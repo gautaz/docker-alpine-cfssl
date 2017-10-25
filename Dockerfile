@@ -29,6 +29,9 @@ COPY --from=builder /go/bin/cfssl /usr/bin
 COPY --from=builder /go/bin/cfssljson /usr/bin
 COPY --from=builder /go/bin/mkbundle /usr/bin
 COPY --from=builder /go/bin/multirootca /usr/bin
+COPY --from=builder /go/src/github.com/cloudflare/cfssl/certdb/mysql /usr/share/misc/cfssl/mysql
+COPY --from=builder /go/src/github.com/cloudflare/cfssl/certdb/pg /usr/share/misc/cfssl/pg
+COPY --from=builder /go/src/github.com/cloudflare/cfssl/certdb/sqlite /usr/share/misc/cfssl/sqlite
 
 COPY entrypoint.sh /
 USER cfssl:cfssl
