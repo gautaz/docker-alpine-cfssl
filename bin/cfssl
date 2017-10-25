@@ -11,7 +11,7 @@ if [ $# -eq 0 ]; then
 	All options are passed by default to the Docker instance entry point.
 
 	In order to pass Docker run options:
-	cfssl -- [docker option...] -- [cfssl option...]
+	cfssl [cfssl option...] -- [docker option...] -- [cfssl option...] ...
 
 	Each time '--' is used, it switches the option context.
 
